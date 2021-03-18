@@ -14,6 +14,10 @@ public class Exponents {
         demo.sufixToValue();
         // 指数计数法/科学计数法：E/e
         demo.exponents();
+        // double:  1.7976931348623157E308,  4.9E-324
+        System.out.println("double:"+Double.MAX_VALUE+","+Double.MIN_VALUE);
+        // float:   3.4028235E38,   1.4E-45
+        System.out.println("float:"+Float.MAX_VALUE+","+Float.MIN_VALUE);
     }
 
     /** Description: 指数计数法/科学计数法
