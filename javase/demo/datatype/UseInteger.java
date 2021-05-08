@@ -11,6 +11,7 @@ public class UseInteger {
     public static void main(String[] args) {
         UseInteger demo = new UseInteger();
         demo.baseConversion();
+        demo.testByteToBinaryString();
     }
 
     /**
@@ -19,6 +20,7 @@ public class UseInteger {
      *      可以将char/short/int/byte类型的数值传递给Integer的进制转化接口，如果将比较小的类型传递给这些方法，将会发生自动类型转化，相应类型会自动转化为int
      *      不能将long型的数值传递给Integer的进制转化接口，因为超出int的取值范围，会出现精度问题
      * @author created by Meiyu Chen at 2021-3-18 10:28, v1.0
+     * @see javase.demo.operator.BitOperatorDemos#byteToBinaryString(byte) 
      */
     private void baseConversion() {
         // 十进制
@@ -92,5 +94,33 @@ public class UseInteger {
                         + ",十六进制：0x/0X" + Double.toHexString(d1)
                         + ",二进制：(基本类型的封装器中没有提供double型数值转化成二进制的API)"
         );
+    }
+
+    /** Description: 测试byteToBinaryString()。看看byte转成二进制的函数是否正确
+     * @author created by Meiyu Chen at 2021-3-18 17:39, v1.0
+     */
+    private void testByteToBinaryString(){
+        System.out.println("将byte型数值转成二进制形式：");
+        // 对应的二进制应为：1010
+        for (byte b=Byte.MIN_VALUE; b < Byte.MAX_VALUE; b++) {
+            System.out.println(b + "=" + byteToBinaryString(b));
+        }
+        System.out.println("将byte型数值转成二进制形式：----------end ----------");
+    }
+    /**
+     * Description: 基本数据类型对应的封装器中没有提供将byte型数值转化成二进制字符串的API
+     * 本函数尝试使用位操作符来实现这一目的
+     *
+     * @return
+     * @author created by Meiyu Chen at 2021-3-18 16:48, v1.0
+     */
+    public String byteToBinaryString(byte b) {
+        if (b > 0) {
+            return Integer.toBinaryString(b);
+        }
+        if (b == 0) {
+            return "0";
+        }
+        return Integer.toBinaryString(b).substring(24);
     }
 }

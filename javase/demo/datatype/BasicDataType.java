@@ -19,8 +19,44 @@ public class BasicDataType {
 
 
     public static void main(String[] args) {
-        BasicDataType basicDataType = new BasicDataType();
-        basicDataType.printDefaultValue();
+        BasicDataType demo = new BasicDataType();
+        // 基本数据类型变量的默认值（作为class field 时有默认值，作为局部变量时无默认值）
+        demo.printDefaultValue();
+        // 显式/隐式数据类型转换
+        demo.dataTypeCast();
+        // 超出取值范围
+        demo.outOfRange();
+    }
+
+    /** Description: 基本数据类型都有有限的取值范围，使用基本数据类型进行运算时，要也别小心运算结果超出取值范围的情况
+     *        计算结果超出取值范围时，编译器并不会报错，所以开发者编程时更需谨慎小心，防止程序运行出现意想不到的结果
+     * @author created by Meiyu Chen at 2021-3-19 13:35, v1.0
+     */
+    private void outOfRange() {
+        System.out.println("演示计算结果超出取值范围的情况：");
+        int i = Integer.MAX_VALUE;
+        System.out.println("i="+i);
+        int sum = i+1;
+        int mul = i*2;
+        System.out.println("i+1="+sum);
+        System.out.println("i*2="+mul);
+        System.out.println("结果分析：期望得到的值分别是2147483648和4294967294，结果却得到了-2147483648和-2，这是因为表达式计算得到的结果已经超出了int的取值范围");
+    }
+
+    /** Description: 数据类型转换（显式/隐式）
+     * @author created by Meiyu Chen at 2021-3-18 17:52, v1.0
+     */
+    private void dataTypeCast() {
+        // float && double类型的数值转成int型时，不会四舍五入，而是直接丢弃小数部分
+        System.out.println("(int) 1.3f = " + ((int) 1.3f));
+        System.out.println("(int) 1.6f = " + ((int) 1.6f));
+        System.out.println("(int) 3.3d = " + ((int) 3.3d));
+        System.out.println("(int) 3.88d = " + ((int) 3.88d));
+        // 如果想要四舍五入，请使用Math.round()
+        System.out.println("Math.round(1.3f) = " + Math.round(1.3f));
+        System.out.println("Math.round(1.6f) = " + Math.round(1.6f));
+        System.out.println("Math.round(1.33d) = " + Math.round(1.32d));
+        System.out.println("Math.round(1.68d) = " + Math.round(1.68d));
     }
 
     /** Description: 基本数据类型的<b>“默认值”</b>
