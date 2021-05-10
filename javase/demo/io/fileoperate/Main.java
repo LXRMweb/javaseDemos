@@ -1,6 +1,8 @@
 package javase.demo.io.fileoperate;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 /** Description: demo - java 文件操作
@@ -124,8 +126,113 @@ public class Main {
 //        demonstrateList();
 
         // 遍历某目录及其子目录
-        iterXxxDir(new File("D:" + File.separator + "testFile"));
+//        iterXxxDir(new File("D:" + File.separator + "testFile"));
+
+        // 文件过滤器
+        demonstrateFileFilter(new File("D:" + File.separator + "testFile"));
     }
+
+    /** Description: 展示文件过滤器的用法
+     *      列出文件夹下所有md文件
+     * @author created by Meiyu Chen at 2021-5-10 15:05, v1.0
+     * @param dir
+     */
+    private static void demonstrateFileFilter(File dir) {
+        // 列出某文件夹下所有md文件（不考虑子文件夹）
+//        demonstrateFileFilter1(dir);
+
+        // 列出某文件夹及其子文件夹下所有md文件
+//        demonstrateFileFilter2(dir);
+
+        // 展示java.io.FileNameFilter的用法
+        demonstrateFileNameFilter(dir);
+
+    }
+
+    /** Description: 展示java.io.FileNameFilter的用法
+     * @author created by Meiyu Chen at 2021-5-10 16:36, v1.0
+     */
+    private static void demonstrateFileNameFilter(File dir) {
+//        File[] files = dir.listFiles(new FilenameFilter() {
+//            @Override
+//            /*dir:File 待遍历的目录
+//             * name:String 待遍历目录中的文件或者子文件夹名称*/
+//            public boolean accept(File dir, String name) {
+//                return new File(dir, name).isDirectory() || name.toLowerCase().endsWith(".md");
+//            }
+//        });
+
+        /*可以使用lambda表达式简化匿名内部类
+        * 注意：只有内部只含有一个函数的抽象类/接口，才可以使用lambda表达式
+        * 因为FilenameFilter中只有一个抽象方法——accept()，所以这里的匿名内部类可以使用lambda来优化
+        * 下面这句代码和上面的代码完全等价
+        * */
+        File[] files = dir.listFiles((File direc, String name) -> {
+            return new File(direc, name).isDirectory() || name.toLowerCase().endsWith(".md");
+        });
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                // 遍历子目录
+                demonstrateFileNameFilter(file);
+            }else{
+                System.out.println(file);
+            }
+        }
+    }
+
+    /** Description: 列出某文件夹及其子文件夹下所有md文件
+     * @author created by Meiyu Chen at 2021-5-10 16:24, v1.0
+     */
+    private static void demonstrateFileFilter2(File dir) {
+//        File[] files = dir.listFiles(new FileFilter() {
+//            @Override
+//            public boolean accept(File pathname) {
+//                // 如果是md文件，则添加进列表
+//                // 如果是目录，也要添加进列表，因为需要遍历子目录，看看子目录中有没有md文件
+////                return dir.isDirectory() || dir.getName().toLowerCase().endsWith(".md");
+//                return pathname.isDirectory() || pathname.getName().toLowerCase().endsWith(".md");
+//            }
+//        });
+
+        /*可以使用lambda表达式简化匿名内部类
+         * 注意：只有内部只含有一个函数的抽象类/接口，才可以使用lambda表达式
+         * 因为FilenameFilter中只有一个抽象方法——accept()，所以这里的匿名内部类可以使用lambda来优化
+         * 下面这句代码和上面的代码完全等价
+         * */
+        File[] files = dir.listFiles((File pathname)->{
+            return pathname.isDirectory() || pathname.getName().toLowerCase().endsWith(".md");
+        });
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                // 遍历子目录，看子目录及子目录的子目录中有没有md文件
+                demonstrateFileFilter2(file);
+            }else {
+                System.out.println(file);
+            }
+        }
+    }
+
+    /** Description: 列出某文件夹下所有md文件（不考虑子文件夹）
+     * @author created by Meiyu Chen at 2021-5-10 16:22, v1.0
+     */
+    private static void demonstrateFileFilter1(File dir) {
+        File[] files = dir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.getName().toLowerCase().endsWith(".md");
+            }
+        });
+
+        for (File file : files) {
+            System.out.println(file);
+        }
+    }/* Output: (55% match)
+D:\testFile\readme - 副本.md
+D:\testFile\readme.md
+*///:~
+
 
     /** Description: 遍历目录及其子目录
      * @author created by Meiyu Chen at 2021-5-8 17:43, v1.0
@@ -138,7 +245,8 @@ public class Main {
             return;
         }
         for (File file : files) {
-            System.out.println("-" + file.getName());
+//            System.out.println("-" + file.getName());
+            System.out.println("-" + file);
             if (file.isDirectory()) {
                 iterXxxDir(file);
             }
