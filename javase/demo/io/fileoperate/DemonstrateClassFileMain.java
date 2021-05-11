@@ -6,11 +6,12 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 
 /** Description: demo - java 文件操作
+ *     展示java.io.File/FileFilter/FilenameFilter的用法
  * @author created by Meiyu Chen at 2021-5-8 10:15, v1.0
  *      <br>modified by [TODO-修改者] at [TODO-修改时间], [TODO-版本], 修改内容概述如下:
  *      <br>    [TODO-修改内容概述]
  */
-public class Main {
+public class DemonstrateClassFileMain {
 
     public static void main(String[] args) {
 //        // 展示File类中四个public static field的用法
