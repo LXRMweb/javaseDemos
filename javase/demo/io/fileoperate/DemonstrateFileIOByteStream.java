@@ -12,7 +12,7 @@ import java.util.Arrays;
  *      <br>modified by [TODO-修改者] at [TODO-修改时间], [TODO-版本], 修改内容概述如下:
  *      <br>    [TODO-修改内容概述]
  */
-public class FileIO {
+public class DemonstrateFileIOByteStream {
     public static void main(String[] args) {
         // 使用二进制流将数据从内从输出到磁盘文件
 //        demonstrateFileOutputStream();
