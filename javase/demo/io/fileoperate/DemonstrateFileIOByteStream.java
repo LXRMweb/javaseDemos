@@ -3,18 +3,24 @@ package javase.demo.io.fileoperate;
 import java.io.*;
 import java.util.Arrays;
 
-/** Description: 演示文件输入/输出流操作示例
+/** Description: 演示文件输入/输出流操作示例(字节流)
+ *  相关API： FileInputStream && FileOutputStream
  *      输出：将数据从内存输出到硬盘文件
  *      输入：将数据从硬盘文件读入到内存
  *      输出原理：java code -> JVM -> OS -> OS调用文件操作方法，将数据从内存写入到文件中
  *      输入原理：java code -> JVM -> OS -> OS调用文件操作方法，将数据从磁盘文件读入到内存中
+ *  备注：使用字节流（FileIn/OutputStream）读写文件，容易出现中文乱码问题
+ *      乱码原因：各个字符集中都不是使用一个字节存储汉字，如：GBK中一个中文占用两个字节，UTF-8中一个中文占用三个字节
+ *          使用字节流去读写文件，一次只能读一个字节，直接强制类型转化成char型，实际上是将一个汉字拆分成了三个部分
+ *          解析出来的内容就会是乱码，而非正确的汉字
+ *      乱码解决：使用字符流读写中文文本，不要使用字节流
  * @author created by Meiyu Chen at 2021-5-11 10:06, v1.0
  *      <br>modified by [TODO-修改者] at [TODO-修改时间], [TODO-版本], 修改内容概述如下:
  *      <br>    [TODO-修改内容概述]
  */
 public class DemonstrateFileIOByteStream {
     public static void main(String[] args) {
-        // 使用二进制流将数据从内从输出到磁盘文件
+        // 使用二进制流将数据从内存输出到磁盘文件
 //        demonstrateFileOutputStream();
 
         // 使用二进制输入流将数据从磁盘文件读入到内存中
@@ -75,7 +81,7 @@ public class DemonstrateFileIOByteStream {
         * 返回值：int 每次调用read(bytes)实际读取到的有效字节数
         *       也即：本次读取了多少个字节
         *       一开始每次读取，得到的返回值都 === bytes: byte[]数组的长度
-        *       快多大文件末尾时，得到的返回值一般会小于bytes数组长度
+        *       快到达文件末尾时，得到的返回值一般会小于bytes数组长度
         *       如果已经到达文件结束标记位置，再次调用read(bytes)，将不会读到任何内容，返回值为-1
         * 本例：每次读取三个字节的内容，存储到bytes: byte[]数组中
         *       新读到的内容覆盖bytes数组原有内容
