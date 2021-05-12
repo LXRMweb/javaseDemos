@@ -50,17 +50,28 @@ public class DemonstrateFileIOByteStream {
             // 一次读取多个字节
             readOnceMulByte(fis);
 
-
-
-            /*step5, 释放内存、系统资源
-             * 文件输入流运行机制：java code -> JVM -> OS -> OS调用文件操作方法，将数据从磁盘文件读入到内存中
-             * 由此可见，文件输入过程中，会占用内存空间，占用OS资源，所以，文件输入完毕之后，要记得释放相应的资源
-             * fis.colse() 关闭此文件输入流，并释放与此有关的所有系统资源*/
-            fis.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            /*step5, 释放内存、系统资源
+             * 文件输入流运行机制：java code -> JVM -> OS -> OS调用文件操作方法，将数据从磁盘文件读入到内存中
+             * 由此可见，文件输入过程中，会占用内存空间，占用OS资源，所以，文件输入完毕之后，要记得释放相应的资源
+             * fis.colse() 关闭此文件输入流，并释放与此有关的所有系统资源
+             * 1. 一定要将close()放在finally中调用，这样可以防止try代码块抛出异常时执行不到close()
+             * 2. close()也可能抛出异常，所以close函数也要用try..catch包裹起来
+             * */
+            if (fis!=null) {
+                // 如果相应的文件路径不是真实存在的，那么创建fileReader时就会抛出异常，这里拿到的fileReader就会是null
+                // null.close()会抛出NullPointerException
+                // 所以为了避免执行close时抛出空指针异常，最好在调用close之前先进行一下非空判断
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
     }
@@ -210,16 +221,28 @@ accc
             byte[] bytes2 = {97,-98,99,-100,99,99}; // 打开文件，看到的会是"a瀋渃c"
             fos.write(bytes2);
 
-
-            /*step5, 释放内存、系统资源
-            * 文件输出流运行机制：java code -> JVM -> OS -> OS调用文件操作方法，将数据从内存写入到文件中
-            * 由此可见，文件输出过程中，会占用内存空间，占用OS资源，所以，文件输出完毕之后，要记得释放相应的资源
-            * fos.colse() 关闭此文件输出流，并释放与此有关的所有系统资源*/
-            fos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            /*step5, 释放内存、系统资源
+             * 文件输出流运行机制：java code -> JVM -> OS -> OS调用文件操作方法，将数据从内存写入到文件中
+             * 由此可见，文件输出过程中，会占用内存空间，占用OS资源，所以，文件输出完毕之后，要记得释放相应的资源
+             * fos.colse() 关闭此文件输出流，并释放与此有关的所有系统资源
+             * 1. 一定要将close()放在finally中调用，这样可以防止try代码块抛出异常时执行不到close()
+             * 2. close()也可能抛出异常，所以close函数也要用try..catch包裹起来
+             * */
+            if (fos!=null) {
+                // 如果相应的文件路径不是真实存在的，那么创建fileReader时就会抛出异常，这里拿到的fileReader就会是null
+                // null.close()会抛出NullPointerException
+                // 所以为了避免执行close时抛出空指针异常，最好在调用close之前先进行一下非空判断
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
