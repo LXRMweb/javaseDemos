@@ -38,29 +38,45 @@ public class FileCopy {
             desFile.delete();
         }
 
+        // step4, 引入缓冲区，提高文件IO效率
+        BufferedInputStream bfis = null;
+        BufferedOutputStream bfos = null;
         try {
-            // step4, 创建文件IO流对象
-            FileInputStream fis = new FileInputStream(srcFile);
-            FileOutputStream fos = new FileOutputStream(desFile,true);
+            bfis = new BufferedInputStream(new FileInputStream(srcFile));
+            bfos = new BufferedOutputStream(new FileOutputStream(desFile,true));
 
             // step5, 读取源文件，写入目的文件
 //            byte[] bytes = new byte[1024];
             byte[] bytes = new byte[2];
             int len = -10;
-            while ((len = fis.read(bytes))!=-1) {
-                fos.write(bytes,0,len);
+            // 引入缓冲区，效率会更高
+            while ((len = bfis.read(bytes))!=-1) {
+                bfos.write(bytes,0,len);
             }
-
-            /*step6, 释放相应的内存、系统资源
-            * 注意：先关文件输出字节流，再关文件读取字节流
-            *   因为写完了代表肯定读完了，反之则不一定成立
-            * */
-            fos.close();
-            fis.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            /*step6, 释放相应的内存、系统资源
+             * 注意：先关文件输出字节流，再关文件读取字节流
+             *   因为写完了代表肯定读完了，反之则不一定成立
+             * */
+            try {
+                if (bfos!=null) {
+                    bfos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (bfis!=null) {
+                    try {
+                        bfis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
         long endTime = System.currentTimeMillis();
         System.out.println("复制文件，总耗时 = " + (endTime - startTime) + "毫秒");

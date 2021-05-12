@@ -21,7 +21,7 @@ public class DemonstrateFileIOCharStream {
         demonstrateFileWriter();
 
         // 使用二进制输入流将数据从磁盘文件读入到内存中
-//        demonstrateFileReader();
+        demonstrateFileReader();
     }
 
     /** Description: 展示文件输入流的用法
