@@ -41,3 +41,7 @@
 另外，这些类都是抽象类，不能直接使用，实际编程过程中要是用他们的子类。
 
 ## 附录
+
+## 参考资料
+
+1. [视频-java文件IO操作详解](https://www.bilibili.com/video/BV1U4411V7rq?p=41&spm_id_from=pageDriver)
