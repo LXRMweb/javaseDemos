@@ -31,3 +31,7 @@ override类中的accept(),在accept()中定义文件过滤规则
 2. 相对路径是相对于project根目录的路径
     如： src/java/tt.java
     
+# 编码、解码、字符集
+
+1. 参考[字符集&编码解码](../../other/编码-解码-字符集.md)
+

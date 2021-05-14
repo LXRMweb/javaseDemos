@@ -17,11 +17,129 @@ import java.io.*;
  */
 public class DemonstrateFileIOCharStream {
     public static void main(String[] args) {
-        // 使用二进制流将数据从内存输出到磁盘文件
-        demonstrateFileWriter();
+//        // 使用二进制流将数据从内存输出到磁盘文件
+//        demonstrateFileWriter();
+//
+//        // 使用二进制输入流将数据从磁盘文件读入到内存中
+//        demonstrateFileReader();
 
-        // 使用二进制输入流将数据从磁盘文件读入到内存中
-        demonstrateFileReader();
+        // 文件字符流的中文乱码问题
+        demonstrateCharset();
+    }
+
+    /** Description: 中文乱码问题
+     * 概述：
+     * 1. 在IDEA中，使用字符流FileReader/FileWriter进行文件读写，使用的都是IDEA字符集UTF-8,不会出现乱码
+     * 2. 但是，IDEA中使用FileReader读取OS中手动创建的文件，就有可能出现中文乱码
+     * （如：idea设置的字符集是UTF-8，中文OS的默认字符集是GBK，这时读取OS文件并System.out.println到IDEA控制台的话，就会展示乱码）
+     * 参考资料：
+     * 1. [编码-解码-字符集](../../other/编码-解码-字符集.md)
+     * 2. [视频-字符流的中文乱码问题](https://www.bilibili.com/video/BV1U4411V7rq?p=49)
+     * @author created by Meiyu Chen at 2021-5-14 10:33, v1.0
+     */
+    private static void demonstrateCharset() {
+//        // 1. IDEA中使用字符流读写文件，不会出现中文乱码
+//        demonstrateCharFileIOWithSameCharset();
+
+        // 2. IDEA中读取OS中手动创建的文本，由于中文OS默认编码方式是GBK，而IDEA字符集是UTF-8，所以会出现中文乱码问题
+        demonstrateCharFileIOWithDiffCharset();
+    }
+
+    /** Description: 使用不同的字符集读写文件，会出现中文乱码
+     * 中文OS中手动创建一个文本文件，然后在IDEA中执行code，将文本内容读取出来并输出到console中
+     * 由于中文OS默认编码方式是GBK，所以手动创建的文件编码方式默认也是GBK（当然，你也可以手动更改其字符集）
+     * 而IDEA设置的字符集默认是UTF-8
+     * 这就导致字符的编码规则和解码规则不一致，所以会出现中文乱码问题
+     * @author created by Meiyu Chen at 2021-5-14 11:18, v1.0
+     */
+    private static void demonstrateCharFileIOWithDiffCharset() {
+        BufferedReader bfr = null;
+        try {
+            bfr = new BufferedReader(new FileReader("D:" + File.separator + "testFile" + File.separator + "手动创建文件使用OS默认编码.txt"));
+            String nextLine = "";
+            while((nextLine=bfr.readLine())!=null){
+                System.out.println(nextLine);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bfr!=null) {
+                try {
+                    bfr.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /** Description: 使用相同的字符集读写文件，不会出现中文乱码
+     * 执行完本程序之后，将会在磁盘中创建一个文件，并往其中写入了中文
+     * 由于FileWriter创建文件时使用的是IDEA默认的字符集UTF-8，所以文件内容的编码规则就是UTF-8
+     * 所以，你使用任何编辑器(notepad/sublime/记事本...)打开上述文件时，只要相应编辑器设置的字符集也是UTF-8,你看到的内容就不会有乱码
+     * 但是，如果相应编辑器设置的编码方式不是UTF-8，那么打开上述文件展示的就会是乱码
+     * 并且，IDEA console面板展示的内容也不会是乱码，因为IDEA配置的字符集没有改变，也还是UTF-8
+     * @author created by Meiyu Chen at 2021-5-14 10:58, v1.0
+     */
+    private static void demonstrateCharFileIOWithSameCharset() {
+        // 创建文件字符IO流对象（引入缓冲区以提升效率）
+        BufferedReader bfr = null;
+        BufferedWriter bfw = null;
+        try {
+            // 写文件
+            // step1,确定输出文件路径
+            String file = "D:" + File.separator + "testFile" + File.separator + "logs" + File.separator +  "log.txt";
+
+            // step2，确保输出文件所在父目录真实存在
+            // 经过下述处理，确保创建FileWriter之前，文件所在父目录是真实存在的，防止出现运行时异常
+            File file1 = new File(file);
+            String parent = file1.getParent();
+//        System.out.println(parent); //        D:\testFile\logs
+            File parentDir = new File(parent);
+            if (!parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+
+            bfw = new BufferedWriter(new FileWriter(file));
+            for (int i = 0; i < 10; i++) {
+                bfw.write("第"+i+"行：含有中文字符");
+                // 换行
+                bfw.newLine();
+            }
+            // 缓冲区的内容持久化至磁盘文件
+            bfw.flush();
+
+            // 读文件
+            bfr = new BufferedReader(new FileReader("./a.txt"));
+            String nextLine = "";
+            while ((nextLine = bfr.readLine()) !=null){
+                System.out.println(nextLine);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 释放资源
+            if (bfw!=null) {
+                try {
+                    bfw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (bfr!=null) {
+                        try {
+                            bfr.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /** Description: 展示文件输入流的用法
