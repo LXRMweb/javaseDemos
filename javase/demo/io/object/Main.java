@@ -3,6 +3,8 @@ package javase.demo.io.object;
 import javafx.scene.Parent;
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /** Description: 对象反序列化（二进制流转化成对象）
@@ -13,13 +15,84 @@ import java.util.List;
  *      <br>    [TODO-修改内容概述]
  */
 public class Main {
-    private static List<Person> list;
+    private static List<Person> list = new ArrayList<Person>();
     public static void main(String[] args) {
-        // demo1, 对象序列化，并输出到文件
+        // demo1, 单个对象序列化，并输出到文件
 //        demonstrateObjectOutputStream();
 
-        // demo2, 对象反序列化（从文件中读取出来，二进制转化成对象）
+        // demo2, 单个对象反序列化（从文件中读取出来，二进制转化成对象）
         demonstrateObjectInputStream();
+
+        // demo3, 序列化多个对象
+        demonstrateMultiObjOut();
+
+        // demo4, 反序列化，得到多个对象
+        demonstrateMultiObjIn();
+    }
+
+    /** Description: 反序列化集合，读取出多个对象
+     * @author created by Meiyu Chen at 2021-5-20 14:55, v1.0
+     */
+    private static void demonstrateMultiObjIn() {
+        String file = "D:" + File.separator + "testFile" + File.separator + "objs" + File.separator + "multiObjs.txt";
+
+        // step1, 创建ois
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+            // step2, 对象反序列化
+            list.clear();
+            list = (ArrayList) ois.readObject();
+            for (Person person : list) {
+                System.out.println(person);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** Description: 如果想要同时序列化多个对象，该怎么做呢？
+     * 思路：借助于集合，先将多个Object存储到集合中，再将集合序列化
+     * @author created by Meiyu Chen at 2021-5-20 14:54, v1.0
+     */
+    private static void demonstrateMultiObjOut() {
+        String file = "D:" + File.separator + "testFile" + File.separator + "objs" + File.separator + "multiObjs.txt";
+        // 确保上述文件所在的父目录真实存在
+        String parent = new File(file).getParent();
+        File dir = new File(parent);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        // step1, 准备数据（将对象存储到集合中）
+        for (int i = 0; i < 100; i++) {
+            list.add(new Person("name"+i,20+i%6));
+        }
+
+        // step2, 创建oos
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+            // step3, 将集合序列化并写入文件
+            oos.writeObject(list);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // step4, 释放资源
+            if (oos!=null) {
+                try {
+                    oos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /** Description: 对象反序列化（从文件中读取出来，二进制转化成对象）
