@@ -1,8 +1,7 @@
-package javase.demo.datatype.map;
+package javase.demo.datacontainer.map;
 
 
 import java.io.*;
-import java.nio.file.Path;
 import java.util.Properties;
 import java.util.Set;
 

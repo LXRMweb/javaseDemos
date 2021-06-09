@@ -1,4 +1,4 @@
-package javase.demo.datatype.map;
+package javase.demo.datacontainer.map;
 
 import java.util.HashMap;
 import java.util.Map;

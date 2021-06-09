@@ -29,20 +29,20 @@ public class DemoString {
      * @author created by Meiyu Chen at 2021-6-9 9:33, v1.0
      */
     private void demonstrateClassString() {
-//        // 演示如何创建String对象
-//        createStringObject();
-//
-//        // == vs equals(): 字符串常量池
-//        demonstrateEquals();
-//
-//        // 字符串转换成数组
-//        transfer();
+        // 演示如何创建String对象
+        createStringObject();
 
-//        // 子串替换
-//        demonstrateReplace();
+        // == vs equals(): 字符串常量池
+        demonstrateEquals();
 
-//        // unicode码表中相应字符的下标
-//        demonstrateUnicode();
+        // 字符串转换成数组
+        transfer();
+
+        // 子串替换
+        demonstrateReplace();
+
+        // unicode码表中相应字符的下标
+        demonstrateUnicode();
 
         // 字符串切割
         demonstrateSplit();
