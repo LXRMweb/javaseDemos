@@ -1,7 +1,6 @@
-package javase.demo.datatype.objects;
+package javase.demo.string;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /** Description: java字符串
