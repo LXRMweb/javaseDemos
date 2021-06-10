@@ -9,6 +9,11 @@ import java.util.Map;
  *      <br>    [TODO-修改内容概述]
  */
 public class DemonstrateHashMap {
+    public static void main(String[] args) {
+        DemonstrateHashMap test = new DemonstrateHashMap();
+        int[] nums = {'1','1','2','3','1','2','3','2'};
+        System.out.println(test.numIdenticalPairs(nums));
+    }
     public int numIdenticalPairs(int[] nums) {
         int rst = 0;
         // 统计数组中每个数字出现的次数
