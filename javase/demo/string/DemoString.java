@@ -29,23 +29,38 @@ public class DemoString {
      * @author created by Meiyu Chen at 2021-6-9 9:33, v1.0
      */
     private void demonstrateClassString() {
-        // 演示如何创建String对象
-        createStringObject();
+//        // 演示如何创建String对象
+//        createStringObject();
+//
+//        // == vs equals(): 字符串常量池
+//        demonstrateEquals();
+//
+//        // 字符串转换成数组
+//        transfer();
+//
+//        // 子串替换
+//        demonstrateReplace();
+//
+//        // unicode码表中相应字符的下标
+//        demonstrateUnicode();
+//
+//        // 字符串切割
+//        demonstrateSplit();
 
-        // == vs equals(): 字符串常量池
-        demonstrateEquals();
+        // String类中的其他method
+        demonstrateOtherMethods();
+    }
 
-        // 字符串转换成数组
-        transfer();
+    /** Description: String类中的其他methods
+     * @author created by Meiyu Chen at 2021-6-10 11:04, v1.0
+     */
+    private void demonstrateOtherMethods() {
+        String str = " 这是一个字符串 哈哈哈 ";
+        System.out.println(str.length()+","+str);
 
-        // 子串替换
-        demonstrateReplace();
-
-        // unicode码表中相应字符的下标
-        demonstrateUnicode();
-
-        // 字符串切割
-        demonstrateSplit();
+        // String#trim() 移除开头和结尾的空格（只移除开头和结尾的，不移除其他地方的）
+        String trim = str.trim();
+        System.out.println(trim.length()+","+trim);
     }
 
     /** Description: 字符串切割
