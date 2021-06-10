@@ -61,6 +61,22 @@ public class DemoString {
         // String#trim() 移除开头和结尾的空格（只移除开头和结尾的，不移除其他地方的）
         String trim = str.trim();
         System.out.println(trim.length()+","+trim);
+
+        // String#split()
+        String str3 = "abc";
+        String[] split = str3.split("");
+        System.out.println(Arrays.toString(split)); // [a, b, c]
+
+        // String#join()
+        String str2 = "abc";
+        String join = String.join("|", str2.split(""));
+        System.out.println(join); // a|b|c
+
+        // String#matches()
+        // 正则表达式
+        String regex = "[a|b]*"; // 字符串中是否只包含a、b
+        System.out.println("abcd".matches(regex)); // false
+        System.out.println("abbbbaaa".matches(regex)); // true
     }
 
     /** Description: 字符串切割
